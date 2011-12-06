@@ -1,0 +1,15 @@
+-Xlint:ignore
+-1.5
+-encoding
+UTF-8
+-source
+1.5
+-target
+1.5
+-classpath
+D:\lib\maven\repository\javax\validation\validation-api\1.0.0.GA\validation-api-1.0.0.GA.jar;D:\lib\maven\repository\org\apache\bval\bval-jsr303\0.3-incubating\bval-jsr303-0.3-incubating.jar;D:\lib\maven\repository\org\aspectj\aspectjrt\1.6.11\aspectjrt-1.6.11.jar;D:\lib\maven\repository\junit\junit\4.10\junit-4.10.jar;D:\lib\maven\repository\org\apache\bval\bval-core\0.3-incubating\bval-core-0.3-incubating.jar;D:\lib\maven\repository\commons-lang\commons-lang\2.4\commons-lang-2.4.jar;D:\lib\maven\repository\commons-beanutils\commons-beanutils-core\1.8.3\commons-beanutils-core-1.8.3.jar;D:\lib\maven\repository\org\slf4j\slf4j-api\1.6.1\slf4j-api-1.6.1.jar;D:\src\srcpit\ws\common-constraints\target\classes
+-d
+D:\src\srcpit\ws\common-constraints\target\classes
+D:\src\srcpit\ws\common-constraints\src\main\java\org\sourcepit\common\constraints\IValidator.java
+D:\src\srcpit\ws\common-constraints\src\main\java\org\sourcepit\common\constraints\MethodAspects.aj
+D:\src\srcpit\ws\common-constraints\src\main\java\org\sourcepit\common\constraints\ValidatorFacade.java
