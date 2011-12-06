@@ -16,7 +16,6 @@ import javax.validation.bootstrap.ProviderSpecificBootstrap;
 
 import org.apache.bval.jsr303.ApacheValidationProvider;
 import org.apache.bval.jsr303.ApacheValidatorConfiguration;
-import org.apache.bval.jsr303.ApacheValidatorFactory;
 import org.apache.bval.jsr303.DefaultMessageInterpolator;
 import org.apache.bval.jsr303.extensions.MethodValidator;
 
