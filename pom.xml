@@ -6,6 +6,7 @@
 		<groupId>org.sourcepit.common</groupId>
 		<artifactId>common-parent</artifactId>
 		<version>2-SNAPSHOT</version>
+		<relativePath>../common-parent</relativePath>
 	</parent>
 
 	<artifactId>common-constraints</artifactId>
