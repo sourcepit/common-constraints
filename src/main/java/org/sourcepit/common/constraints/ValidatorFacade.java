@@ -35,22 +35,32 @@ public class ValidatorFacade implements IValidator
 
    public ValidatorFacade()
    {
-      ProviderSpecificBootstrap<ApacheValidatorConfiguration> provider = Validation
-         .byProvider(ApacheValidationProvider.class);
-
-      ApacheValidatorConfiguration configuration = provider.configure();
-      configuration.addProperty(ApacheValidatorConfiguration.Properties.VALIDATOR_FACTORY_CLASSNAME,
-         ApacheValidatorFactory.class.getName());
-      configuration.ignoreXmlConfiguration();
-      configuration.messageInterpolator(new DefaultMessageInterpolator()
+      final ClassLoader ctx = Thread.currentThread().getContextClassLoader();
+      try
       {
-         @Override
-         public String interpolate(String message, Context context, Locale locale)
+         Thread.currentThread().setContextClassLoader(ApacheValidationProvider.class.getClassLoader());
+         
+         ProviderSpecificBootstrap<ApacheValidatorConfiguration> provider = Validation
+            .byProvider(ApacheValidationProvider.class);
+
+         ApacheValidatorConfiguration configuration = provider.configure();
+         configuration.addProperty(ApacheValidatorConfiguration.Properties.VALIDATOR_FACTORY_CLASSNAME,
+            ApacheValidatorFactory.class.getName());
+         configuration.ignoreXmlConfiguration();
+         configuration.messageInterpolator(new DefaultMessageInterpolator()
          {
-            return super.interpolate(message, context, new Locale(""));
-         }
-      });
-      methodValidator = configuration.buildValidatorFactory().getValidator().unwrap(MethodValidator.class);
+            @Override
+            public String interpolate(String message, Context context, Locale locale)
+            {
+               return super.interpolate(message, context, new Locale(""));
+            }
+         });
+         methodValidator = configuration.buildValidatorFactory().getValidator().unwrap(MethodValidator.class);
+      }
+      finally
+      {
+         Thread.currentThread().setContextClassLoader(ctx);
+      }
    }
 
    /**
