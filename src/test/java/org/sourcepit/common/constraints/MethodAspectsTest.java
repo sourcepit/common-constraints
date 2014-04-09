@@ -6,7 +6,6 @@
 
 package org.sourcepit.common.constraints;
 
-import javax.validation.ConstraintViolationException;
 import javax.validation.constraints.NotNull;
 
 import org.junit.Test;
@@ -20,7 +19,7 @@ public class MethodAspectsTest
       {
          methodNotNullArg(null);
       }
-      catch (ConstraintViolationException e)
+      catch (IllegalArgumentException e)
       {
       }
 
@@ -30,7 +29,7 @@ public class MethodAspectsTest
       {
          methodNotNullArgs(null, null);
       }
-      catch (ConstraintViolationException e)
+      catch (IllegalArgumentException e)
       {
       }
 
@@ -38,7 +37,7 @@ public class MethodAspectsTest
       {
          methodNotNullArgs("", null);
       }
-      catch (ConstraintViolationException e)
+      catch (IllegalArgumentException e)
       {
       }
 
@@ -52,7 +51,7 @@ public class MethodAspectsTest
       {
          methodReturnNotNull(null);
       }
-      catch (ConstraintViolationException e)
+      catch (IllegalStateException e)
       {
       }
       

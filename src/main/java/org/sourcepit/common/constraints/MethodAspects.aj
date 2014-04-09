@@ -6,52 +6,65 @@
 
 package org.sourcepit.common.constraints;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.ConstraintViolationException;
+import javax.validation.constraints.NotNull;
 
 import org.aspectj.lang.reflect.MethodSignature;
 
 public aspect MethodAspects
 {
-   private static final IValidator VALIDATOR = ValidatorFacade.getInstance();
+   private static final Map<Class<?>, AbstractConstraint> CONSTRAINTS = new HashMap<Class<?>, AbstractConstraint>();
+   static
+   {
+      CONSTRAINTS.put(NotNull.class, new NotNullConstraint());
+   }
 
-   pointcut constraintedMethodArgs() : execution(* *(..,@javax.validation.constraints.* (*),..));
+   pointcut constraintedMethodArgs() : execution(* *(..,@javax.validation.constraints.NotNull (*),..));
 
-   pointcut constraintedMethodReturnValue() : execution(@javax.validation.constraints.* !void *(..));
+   pointcut constraintedMethodReturnValue() : execution(@javax.validation.constraints.NotNull !void *(..));
 
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    before() : constraintedMethodArgs() {
-      final MethodSignature methodSignature = (MethodSignature) thisJoinPoint.getSignature();
-      final Class clazz = methodSignature.getDeclaringType();
-      final Method method = methodSignature.getMethod();
+      final Object target = thisJoinPoint.getTarget();
+      final Method method = ((MethodSignature) thisJoinPoint.getSignature()).getMethod();
+      final Annotation[][] parametersAnnotations = method.getParameterAnnotations();
       final Object[] args = thisJoinPoint.getArgs();
       for (int i = 0; i < args.length; i++)
       {
-         final Object arg = args[i];
-
-         final Set<ConstraintViolation<?>> violations = VALIDATOR.validateArgument(clazz, method, i, arg);
-         if (!violations.isEmpty())
+         final Annotation[] parameterAnnotations = parametersAnnotations[i];
+         if (parameterAnnotations.length > 0)
          {
-            ConstraintViolation<?> firstViolation = violations.iterator().next();
-            throw new ConstraintViolationException("Argument " + i + " " + firstViolation.getMessage(), violations);
+            final Object arg = args[i];
+            for (Annotation annotation : parameterAnnotations)
+            {
+               final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
+               if (constraint != null)
+               {
+                  constraint.validateArgument(target, method, i, annotation, arg);
+               }
+            }
          }
       }
    }
 
-   @SuppressWarnings({ "rawtypes", "unchecked" })
    after() returning(Object returnedValue): constraintedMethodReturnValue()
    {
-      final MethodSignature methodSignature = (MethodSignature) thisJoinPoint.getSignature();
-      final Class clazz = methodSignature.getDeclaringType();
-      final Method method = methodSignature.getMethod();
-      final Set<ConstraintViolation<?>> violations = VALIDATOR.validateReturnedValue(clazz, method, returnedValue);
-      if (!violations.isEmpty())
+      final Object target = thisJoinPoint.getTarget();
+      final Method method = ((MethodSignature) thisJoinPoint.getSignature()).getMethod();
+      final Annotation[] annotations = method.getAnnotations();
+      if (annotations.length > 0)
       {
-         ConstraintViolation<?> firstViolation = violations.iterator().next();
-         throw new ConstraintViolationException("Returned value " + firstViolation.getMessage(), violations);
+         for (Annotation annotation : annotations)
+         {
+            final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
+            if (constraint != null)
+            {
+               constraint.validateReturnedValue(target, method, annotation, returnedValue);
+            }
+         }
       }
    }
 }
