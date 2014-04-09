@@ -6,6 +6,8 @@
 
 package org.sourcepit.common.constraints;
 
+import static org.junit.Assert.*;
+
 import javax.validation.constraints.NotNull;
 
 import org.junit.Test;
@@ -18,6 +20,7 @@ public class MethodAspectsTest
       try
       {
          methodNotNullArg(null);
+         fail();
       }
       catch (IllegalArgumentException e)
       {
@@ -28,6 +31,7 @@ public class MethodAspectsTest
       try
       {
          methodNotNullArgs(null, null);
+         fail();
       }
       catch (IllegalArgumentException e)
       {
@@ -36,6 +40,7 @@ public class MethodAspectsTest
       try
       {
          methodNotNullArgs("", null);
+         fail();
       }
       catch (IllegalArgumentException e)
       {
@@ -50,12 +55,67 @@ public class MethodAspectsTest
       try
       {
          methodReturnNotNull(null);
+         fail();
       }
       catch (IllegalStateException e)
       {
       }
-      
+
       methodReturnNotNull("");
+   }
+
+   @Test
+   public void testConstraintedConstructorCall() throws Exception
+   {
+      try
+      {
+         new Foo(null, null);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+      try
+      {
+         new Foo(null, "");
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      try
+      {
+         new Foo("", null);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      new Foo("", "");
+
+      try
+      {
+         new Foo2(null, null);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+      
+      new Foo2(null, "");
+
+      try
+      {
+         new Foo2("", null);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      new Foo2("", "");
    }
 
    private void methodNotNullArg(@NotNull String arg0)
@@ -70,6 +130,20 @@ public class MethodAspectsTest
    private String methodReturnNotNull(String returnValue)
    {
       return returnValue;
+   }
+
+   private static class Foo
+   {
+      Foo(@NotNull String arg0, @NotNull String arg2)
+      {
+      }
+   }
+
+   private static class Foo2
+   {
+      Foo2(String arg0, @NotNull String arg2)
+      {
+      }
    }
 
 }

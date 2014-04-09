@@ -7,12 +7,14 @@
 package org.sourcepit.common.constraints;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
+import org.aspectj.lang.reflect.ConstructorSignature;
 import org.aspectj.lang.reflect.MethodSignature;
 
 public aspect MethodAspects
@@ -23,9 +25,34 @@ public aspect MethodAspects
       CONSTRAINTS.put(NotNull.class, new NotNullConstraint());
    }
 
+   pointcut constraintedConstructorCall() : execution(* .new(..,@javax.validation.constraints.NotNull (*),..));
+
    pointcut constraintedMethodArgs() : execution(* *(..,@javax.validation.constraints.NotNull (*),..));
 
    pointcut constraintedMethodReturnValue() : execution(@javax.validation.constraints.NotNull !void *(..));
+
+   before() : constraintedConstructorCall() {
+      final Object target = thisJoinPoint.getTarget();
+      final Constructor<?> constructor = ((ConstructorSignature) thisJoinPoint.getSignature()).getConstructor();
+      final Annotation[][] parametersAnnotations = constructor.getParameterAnnotations();
+      final Object[] args = thisJoinPoint.getArgs();
+      for (int i = 0; i < args.length; i++)
+      {
+         final Annotation[] parameterAnnotations = parametersAnnotations[i];
+         if (parameterAnnotations.length > 0)
+         {
+            final Object arg = args[i];
+            for (Annotation annotation : parameterAnnotations)
+            {
+               final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
+               if (constraint != null)
+               {
+                  constraint.validateConstructorArgument(target, constructor, i, annotation, arg);
+               }
+            }
+         }
+      }
+   }
 
    before() : constraintedMethodArgs() {
       final Object target = thisJoinPoint.getTarget();
@@ -43,7 +70,7 @@ public aspect MethodAspects
                final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
                if (constraint != null)
                {
-                  constraint.validateArgument(target, method, i, annotation, arg);
+                  constraint.validateMethodArgument(target, method, i, annotation, arg);
                }
             }
          }

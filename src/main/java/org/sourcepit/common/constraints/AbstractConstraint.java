@@ -7,11 +7,16 @@
 package org.sourcepit.common.constraints;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public abstract class AbstractConstraint
 {
-   public abstract void validateArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg);
+   public abstract void validateConstructorArgument(Object target, Constructor<?> constructor, int i,
+      Annotation annotation, Object arg);
+
+   public abstract void validateMethodArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg);
 
    public abstract void validateReturnedValue(Object target, Method method, Annotation annotation, Object value);
+
 }

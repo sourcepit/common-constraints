@@ -7,12 +7,23 @@
 package org.sourcepit.common.constraints;
 
 import java.lang.annotation.Annotation;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
 public class NotNullConstraint extends AbstractConstraint
 {
    @Override
-   public void validateArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg)
+   public void validateConstructorArgument(Object target, Constructor<?> constructor, int argIdx,
+      Annotation annotation, Object arg)
+   {
+      if (arg == null)
+      {
+         throw new IllegalArgumentException("Argument " + argIdx + " of constructor must not be null.");
+      }
+   }
+
+   @Override
+   public void validateMethodArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg)
    {
       if (arg == null)
       {
