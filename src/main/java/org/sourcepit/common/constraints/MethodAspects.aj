@@ -36,9 +36,10 @@ public aspect MethodAspects
       final Constructor<?> constructor = ((ConstructorSignature) thisJoinPoint.getSignature()).getConstructor();
       final Annotation[][] parametersAnnotations = constructor.getParameterAnnotations();
       final Object[] args = thisJoinPoint.getArgs();
-      for (int i = 0; i < args.length; i++)
+      final int offset = args.length - parametersAnnotations.length;
+      for (int i = offset; i < args.length; i++)
       {
-         final Annotation[] parameterAnnotations = parametersAnnotations[i];
+         final Annotation[] parameterAnnotations = parametersAnnotations[i - offset];
          if (parameterAnnotations.length > 0)
          {
             final Object arg = args[i];

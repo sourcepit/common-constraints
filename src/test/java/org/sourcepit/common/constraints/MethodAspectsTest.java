@@ -47,6 +47,31 @@ public class MethodAspectsTest
       }
 
       methodNotNullArgs("", "");
+
+      IFoo iFoo = new IFoo()
+      {
+         @Override
+         public Object foo(@NotNull Object o)
+         {
+            return null;
+         }
+      };
+
+      try
+      {
+         iFoo.foo(null);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      iFoo.foo("");
+   }
+
+   private interface IFoo
+   {
+      Object foo(Object o);
    }
 
    @Test
@@ -62,6 +87,27 @@ public class MethodAspectsTest
       }
 
       methodReturnNotNull("");
+
+      IFoo iFoo = new IFoo()
+      {
+         @Override
+         @NotNull
+         public Object foo(Object o)
+         {
+            return o;
+         }
+      };
+
+      try
+      {
+         iFoo.foo(null);
+         fail();
+      }
+      catch (IllegalStateException e)
+      {
+      }
+
+      iFoo.foo("");
    }
 
    @Test
@@ -103,7 +149,7 @@ public class MethodAspectsTest
       catch (IllegalArgumentException e)
       {
       }
-      
+
       new Foo2(null, "");
 
       try
@@ -116,6 +162,28 @@ public class MethodAspectsTest
       }
 
       new Foo2("", "");
+
+      try
+      {
+         new Foo3(null, null);
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      try
+      {
+         new Foo3(null, "");
+         fail();
+      }
+      catch (IllegalArgumentException e)
+      {
+      }
+
+      new Foo3("", null);
+
+      new Foo3("", "");
    }
 
    private void methodNotNullArg(@NotNull String arg0)
@@ -134,14 +202,21 @@ public class MethodAspectsTest
 
    private static class Foo
    {
-      Foo(@NotNull String arg0, @NotNull String arg2)
+      Foo(@NotNull String arg0, @NotNull String arg1)
       {
       }
    }
 
    private static class Foo2
    {
-      Foo2(String arg0, @NotNull String arg2)
+      Foo2(String arg0, @NotNull String arg1)
+      {
+      }
+   }
+
+   private class Foo3
+   {
+      Foo3(@NotNull String arg0, String arg1)
       {
       }
    }
