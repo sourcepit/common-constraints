@@ -19,10 +19,10 @@ import org.aspectj.lang.reflect.MethodSignature;
 
 public aspect MethodAspects
 {
-   private static final Map<Class<?>, AbstractConstraint> CONSTRAINTS = new HashMap<Class<?>, AbstractConstraint>();
+   private static final Map<String, AbstractConstraint> CONSTRAINTS = new HashMap<String, AbstractConstraint>();
    static
    {
-      CONSTRAINTS.put(NotNull.class, new NotNullConstraint());
+      CONSTRAINTS.put(NotNull.class.getName(), new NotNullConstraint());
    }
 
    pointcut constraintedConstructorCall() : execution(* .new(..,@javax.validation.constraints.NotNull (*),..));
@@ -44,7 +44,7 @@ public aspect MethodAspects
             final Object arg = args[i];
             for (Annotation annotation : parameterAnnotations)
             {
-               final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
+               final AbstractConstraint constraint = getConstraint(annotation);
                if (constraint != null)
                {
                   constraint.validateConstructorArgument(target, constructor, i, annotation, arg);
@@ -67,7 +67,7 @@ public aspect MethodAspects
             final Object arg = args[i];
             for (Annotation annotation : parameterAnnotations)
             {
-               final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
+               final AbstractConstraint constraint = getConstraint(annotation);
                if (constraint != null)
                {
                   constraint.validateMethodArgument(target, method, i, annotation, arg);
@@ -86,12 +86,17 @@ public aspect MethodAspects
       {
          for (Annotation annotation : annotations)
          {
-            final AbstractConstraint constraint = CONSTRAINTS.get(annotation.annotationType());
+            final AbstractConstraint constraint = getConstraint(annotation);
             if (constraint != null)
             {
                constraint.validateReturnedValue(target, method, annotation, returnedValue);
             }
          }
       }
+   }
+
+   private AbstractConstraint getConstraint(Annotation annotation)
+   {
+      return CONSTRAINTS.get(annotation.annotationType().getName());
    }
 }
