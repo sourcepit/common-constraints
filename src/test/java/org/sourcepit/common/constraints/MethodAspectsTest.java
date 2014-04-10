@@ -8,7 +8,7 @@ package org.sourcepit.common.constraints;
 
 import static org.junit.Assert.*;
 
-import javax.validation.constraints.NotNull;
+import org.sourcepit.common.constraints.NotNull;
 
 import org.junit.Test;
 

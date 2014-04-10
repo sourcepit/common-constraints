@@ -4,13 +4,13 @@
  * and is available at http://www.eclipse.org/legal/epl-v10.html
  */
 
-package org.sourcepit.common.constraints;
+package org.sourcepit.common.constraints.validation;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-public class NotNullConstraint extends AbstractConstraint
+public class NotNullValidator extends AbstractValidator
 {
    @Override
    public void validateConstructorArgument(Object target, Constructor<?> constructor, int argIdx,

@@ -12,24 +12,26 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.validation.constraints.NotNull;
-
 import org.aspectj.lang.reflect.ConstructorSignature;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.sourcepit.common.constraints.validation.AbstractValidator;
+import org.sourcepit.common.constraints.validation.NotNullValidator;
+import org.sourcepit.common.constraints.validation.PatternValidator;
 
 public aspect MethodAspects
 {
-   private static final Map<String, AbstractConstraint> CONSTRAINTS = new HashMap<String, AbstractConstraint>();
+   private static final Map<Class<?>, AbstractValidator> CONSTRAINTS = new HashMap<Class<?>, AbstractValidator>();
    static
    {
-      CONSTRAINTS.put(NotNull.class.getName(), new NotNullConstraint());
+      CONSTRAINTS.put(NotNull.class, new NotNullValidator());
+      CONSTRAINTS.put(Pattern.class, new PatternValidator());
    }
 
-   pointcut constraintedConstructorCall() : execution(* .new(..,@javax.validation.constraints.NotNull (*),..));
+   pointcut constraintedConstructorCall() : execution(* .new(..,@org.sourcepit.common.constraints.* (*),..));
 
-   pointcut constraintedMethodArgs() : execution(* *(..,@javax.validation.constraints.NotNull (*),..));
+   pointcut constraintedMethodArgs() : execution(* *(..,@org.sourcepit.common.constraints.* (*),..));
 
-   pointcut constraintedMethodReturnValue() : execution(@javax.validation.constraints.NotNull !void *(..));
+   pointcut constraintedMethodReturnValue() : execution(@org.sourcepit.common.constraints.* !void *(..));
 
    before() : constraintedConstructorCall() {
       final Object target = thisJoinPoint.getTarget();
@@ -45,7 +47,7 @@ public aspect MethodAspects
             final Object arg = args[i];
             for (Annotation annotation : parameterAnnotations)
             {
-               final AbstractConstraint constraint = getConstraint(annotation);
+               final AbstractValidator constraint = getConstraint(annotation);
                if (constraint != null)
                {
                   constraint.validateConstructorArgument(target, constructor, i, annotation, arg);
@@ -68,7 +70,7 @@ public aspect MethodAspects
             final Object arg = args[i];
             for (Annotation annotation : parameterAnnotations)
             {
-               final AbstractConstraint constraint = getConstraint(annotation);
+               final AbstractValidator constraint = getConstraint(annotation);
                if (constraint != null)
                {
                   constraint.validateMethodArgument(target, method, i, annotation, arg);
@@ -87,7 +89,7 @@ public aspect MethodAspects
       {
          for (Annotation annotation : annotations)
          {
-            final AbstractConstraint constraint = getConstraint(annotation);
+            final AbstractValidator constraint = getConstraint(annotation);
             if (constraint != null)
             {
                constraint.validateReturnedValue(target, method, annotation, returnedValue);
@@ -96,8 +98,8 @@ public aspect MethodAspects
       }
    }
 
-   private AbstractConstraint getConstraint(Annotation annotation)
+   private AbstractValidator getConstraint(Annotation annotation)
    {
-      return CONSTRAINTS.get(annotation.annotationType().getName());
+      return CONSTRAINTS.get(annotation.annotationType());
    }
 }
