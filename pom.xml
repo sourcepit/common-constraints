@@ -9,11 +9,11 @@
 
 	<groupId>org.sourcepit.common</groupId>
 	<artifactId>org.sourcepit.common.constraints</artifactId>
-	<version>0.13.0</version>
+	<version>0.14.0-SNAPSHOT</version>
 
 	<scm>
 		<connection>scm:git:git@github.com:sourcepit/common-constraints.git</connection>
-		<tag>org.sourcepit.common.constraints-0.13.0</tag>
+		<tag>HEAD</tag>
 	</scm>
 
 	<!-- repo to resolve parent pom from -->
