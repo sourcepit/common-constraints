@@ -9,7 +9,7 @@
 	</parent>
 
 	<groupId>org.sourcepit.common</groupId>
-	<artifactId>common-constraints</artifactId>
+	<artifactId>org.sourcepit.common.constraints</artifactId>
 	<version>0.13.0-SNAPSHOT</version>
 
 	<scm>
@@ -63,12 +63,6 @@
 						</goals>
 						<configuration>
 							<pde>true</pde>
-							<symbolicName>org.sourcepit.common.constraints</symbolicName>
-							<options>
-								<recommendedImportPolicies>
-									org.sourcepit.common.constraints=equivalent
-								</recommendedImportPolicies>
-							</options>
 						</configuration>
 					</execution>
 				</executions>
