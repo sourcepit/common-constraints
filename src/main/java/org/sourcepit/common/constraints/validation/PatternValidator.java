@@ -23,24 +23,19 @@ import java.util.regex.Pattern;
 import java.util.regex.PatternSyntaxException;
 
 
-public class PatternValidator extends AbstractValidator
-{
+public class PatternValidator extends AbstractValidator {
    @Override
    public void validateConstructorArgument(Object target, Constructor<?> constructor, int argIdx,
-      Annotation annotation, Object arg)
-   {
-      if (!isValid(annotation, arg))
-      {
+      Annotation annotation, Object arg) {
+      if (!isValid(annotation, arg)) {
          throw new IllegalArgumentException("Argument " + argIdx
             + " of constructor must match the following regular expression: " + getRegularExpression(annotation));
       }
    }
 
    @Override
-   public void validateMethodArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg)
-   {
-      if (!isValid(annotation, arg))
-      {
+   public void validateMethodArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg) {
+      if (!isValid(annotation, arg)) {
          throw new IllegalArgumentException("Argument " + argIdx + " of method " + method.getName()
             + " must match the following regular expression: " + getRegularExpression(annotation));
       }
@@ -48,32 +43,26 @@ public class PatternValidator extends AbstractValidator
 
 
    @Override
-   public void validateReturnedValue(Object target, Method method, Annotation annotation, Object value)
-   {
-      if (!isValid(annotation, value))
-      {
+   public void validateReturnedValue(Object target, Method method, Annotation annotation, Object value) {
+      if (!isValid(annotation, value)) {
          throw new IllegalStateException("Returned value of " + method.getName()
             + " must match the following regular expression: " + getRegularExpression(annotation));
       }
    }
 
-   private static boolean isValid(Annotation annotation, Object value)
-   {
+   private static boolean isValid(Annotation annotation, Object value) {
       final String regexp = getRegularExpression(annotation);
       final Pattern pattern;
-      try
-      {
+      try {
          pattern = Pattern.compile(regexp);
       }
-      catch (PatternSyntaxException e)
-      {
+      catch (PatternSyntaxException e) {
          throw new IllegalStateException("Invalid regular expression.'" + regexp + "'", e);
       }
       return value == null || pattern.matcher((CharSequence) value).matches();
    }
 
-   private static String getRegularExpression(Annotation annotation)
-   {
+   private static String getRegularExpression(Annotation annotation) {
       return ((org.sourcepit.common.constraints.Pattern) annotation).regexp();
    }
 

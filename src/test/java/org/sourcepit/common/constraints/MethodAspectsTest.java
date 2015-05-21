@@ -20,173 +20,138 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-public class MethodAspectsTest
-{
+public class MethodAspectsTest {
    @Test
-   public void testConstraintedMethodArgs()
-   {
-      try
-      {
+   public void testConstraintedMethodArgs() {
+      try {
          methodNotNullArg(null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       methodNotNullArg("");
 
-      try
-      {
+      try {
          methodNotNullArgs(null, null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
-      try
-      {
+      try {
          methodNotNullArgs("", null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       methodNotNullArgs("", "");
 
-      IFoo iFoo = new IFoo()
-      {
+      IFoo iFoo = new IFoo() {
          @Override
-         public Object foo(@NotNull Object o)
-         {
+         public Object foo(@NotNull Object o) {
             return null;
          }
       };
 
-      try
-      {
+      try {
          iFoo.foo(null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       iFoo.foo("");
    }
 
-   private interface IFoo
-   {
+   private interface IFoo {
       Object foo(Object o);
    }
 
    @Test
-   public void testConstraintedMethodReturnValue()
-   {
-      try
-      {
+   public void testConstraintedMethodReturnValue() {
+      try {
          methodReturnNotNull(null);
          fail();
       }
-      catch (IllegalStateException e)
-      {
+      catch (IllegalStateException e) {
       }
 
       methodReturnNotNull("");
 
-      IFoo iFoo = new IFoo()
-      {
+      IFoo iFoo = new IFoo() {
          @Override
          @NotNull
-         public Object foo(Object o)
-         {
+         public Object foo(Object o) {
             return o;
          }
       };
 
-      try
-      {
+      try {
          iFoo.foo(null);
          fail();
       }
-      catch (IllegalStateException e)
-      {
+      catch (IllegalStateException e) {
       }
 
       iFoo.foo("");
    }
 
    @Test
-   public void testConstraintedConstructorCall() throws Exception
-   {
-      try
-      {
+   public void testConstraintedConstructorCall() throws Exception {
+      try {
          new Foo(null, null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
-      try
-      {
+      try {
          new Foo(null, "");
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
-      try
-      {
+      try {
          new Foo("", null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       new Foo("", "");
 
-      try
-      {
+      try {
          new Foo2(null, null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       new Foo2(null, "");
 
-      try
-      {
+      try {
          new Foo2("", null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       new Foo2("", "");
 
-      try
-      {
+      try {
          new Foo3(null, null);
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
-      try
-      {
+      try {
          new Foo3(null, "");
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       new Foo3("", null);
@@ -194,38 +159,29 @@ public class MethodAspectsTest
       new Foo3("", "");
    }
 
-   private void methodNotNullArg(@NotNull String arg0)
-   {
+   private void methodNotNullArg(@NotNull String arg0) {
    }
 
-   private void methodNotNullArgs(@NotNull String arg0, @NotNull String arg1)
-   {
+   private void methodNotNullArgs(@NotNull String arg0, @NotNull String arg1) {
    }
 
    @NotNull
-   private String methodReturnNotNull(String returnValue)
-   {
+   private String methodReturnNotNull(String returnValue) {
       return returnValue;
    }
 
-   private static class Foo
-   {
-      Foo(@NotNull String arg0, @NotNull String arg1)
-      {
+   private static class Foo {
+      Foo(@NotNull String arg0, @NotNull String arg1) {
       }
    }
 
-   private static class Foo2
-   {
-      Foo2(String arg0, @NotNull String arg1)
-      {
+   private static class Foo2 {
+      Foo2(String arg0, @NotNull String arg1) {
       }
    }
 
-   private class Foo3
-   {
-      Foo3(@NotNull String arg0, String arg1)
-      {
+   private class Foo3 {
+      Foo3(@NotNull String arg0, String arg1) {
       }
    }
 

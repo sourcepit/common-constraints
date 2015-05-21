@@ -20,8 +20,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-public abstract class AbstractValidator
-{
+public abstract class AbstractValidator {
    public abstract void validateConstructorArgument(Object target, Constructor<?> constructor, int i,
       Annotation annotation, Object arg);
 

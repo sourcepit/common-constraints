@@ -20,28 +20,23 @@ import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
-public class PatternTest
-{
+public class PatternTest {
 
    @Test
-   public void test()
-   {
+   public void test() {
       constraintedMethod(null);
 
-      try
-      {
+      try {
          constraintedMethod("");
          fail();
       }
-      catch (IllegalArgumentException e)
-      {
+      catch (IllegalArgumentException e) {
       }
 
       constraintedMethod("2014-04-10");
    }
 
-   private void constraintedMethod(@Pattern(regexp = "\\d\\d\\d\\d-\\d\\d-\\d\\d") String value)
-   {
+   private void constraintedMethod(@Pattern(regexp = "\\d\\d\\d\\d-\\d\\d-\\d\\d") String value) {
    }
 
 }

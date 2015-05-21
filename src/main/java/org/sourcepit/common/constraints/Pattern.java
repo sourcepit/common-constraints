@@ -35,8 +35,7 @@ import java.lang.annotation.Target;
  */
 @Target({ METHOD, FIELD, ANNOTATION_TYPE, CONSTRUCTOR, PARAMETER })
 @Retention(RUNTIME)
-public @interface Pattern
-{
+public @interface Pattern {
 
    /**
     * @return the regular expression to match

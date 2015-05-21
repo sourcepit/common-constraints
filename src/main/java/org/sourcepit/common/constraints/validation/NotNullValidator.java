@@ -20,33 +20,26 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 
-public class NotNullValidator extends AbstractValidator
-{
+public class NotNullValidator extends AbstractValidator {
    @Override
    public void validateConstructorArgument(Object target, Constructor<?> constructor, int argIdx,
-      Annotation annotation, Object arg)
-   {
-      if (arg == null)
-      {
+      Annotation annotation, Object arg) {
+      if (arg == null) {
          throw new IllegalArgumentException("Argument " + argIdx + " of constructor must not be null.");
       }
    }
 
    @Override
-   public void validateMethodArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg)
-   {
-      if (arg == null)
-      {
+   public void validateMethodArgument(Object target, Method method, int argIdx, Annotation annotation, Object arg) {
+      if (arg == null) {
          throw new IllegalArgumentException("Argument " + argIdx + " of method " + method.getName()
             + " must not be null.");
       }
    }
 
    @Override
-   public void validateReturnedValue(Object target, Method method, Annotation annotation, Object value)
-   {
-      if (value == null)
-      {
+   public void validateReturnedValue(Object target, Method method, Annotation annotation, Object value) {
+      if (value == null) {
          throw new IllegalStateException("Method " + method.getName() + " unexpectedly returned null.");
       }
    }
