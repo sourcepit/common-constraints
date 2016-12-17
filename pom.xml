@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>org.sourcepit</groupId>
 		<artifactId>srcpit-parent</artifactId>
-		<version>21</version>
+		<version>22-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.sourcepit.common</groupId>
@@ -73,7 +73,7 @@
 			<plugin>
 				<groupId>org.sourcepit.osgifier</groupId>
 				<artifactId>osgifier-maven-plugin</artifactId>
-				<version>0.23.0</version>
+				<version>0.24.2</version>
 				<executions>
 					<execution>
 						<goals>
